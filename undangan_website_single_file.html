@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Undangan Digital - Nama Pengantin / Acara</title>
+  <style>
+    :root{--bg:#f7f6f3;--card:#fff;--accent:#2F318B;--muted:#666}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto, "Helvetica Neue", Arial; margin:0; background:linear-gradient(180deg,var(--bg),#fff); color:#222}
+    header{background:var(--accent); color:#fff; padding:40px 20px; text-align:center}
+    header h1{margin:0;font-size:clamp(20px,4vw,34px)}
+    header p{opacity:.9;margin-top:8px}
+    .container{max-width:920px;margin:24px auto;padding:16px}
+
+    .card{background:var(--card);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:0 6px 20px rgba(14,20,30,0.06)}
+
+    .hero{display:flex;gap:18px;align-items:center}
+    .hero .cover{flex:0 0 180px;height:180px;border-radius:12px;background:url('') center/cover no-repeat}
+    .hero .text{flex:1}
+    h2{margin:0 0 6px 0}
+    .details{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+    .detail-item{background:#fbfbfb;padding:10px;border-radius:8px;border:1px solid #f0f0f0}
+
+    .rsvp{display:flex;gap:12px;flex-wrap:wrap}
+    .rsvp button{padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+
+    .countdown{font-weight:700;font-size:18px}
+
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+    .gallery img{width:100%;height:100px;object-fit:cover;border-radius:8px}
+
+    footer{padding:18px;text-align:center;color:var(--muted);font-size:14px}
+
+    /* small screens tweak */
+    @media (max-width:640px){
+      .hero{flex-direction:column;align-items:flex-start}
+      .hero .cover{width:100%;height:220px}
+      .details{grid-template-columns:1fr}
+    }
+
+    /* printable */
+    @media print{header,footer{display:none}body{background:#fff}}
+
+    /* small helper */
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="title">Undangan: Nama Acara</h1>
+    <p id="subtitle">Kami mengundang Anda untuk hadir pada acara spesial kami</p>
+  </header>
+
+  <main class="container">
+    <section class="card hero">
+      <div class="cover" id="coverImage" aria-hidden="true" style="background-image: url('https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=800&q=60')"></div>
+      <div class="text">
+        <h2 id="names">Nama A &amp; Nama B</h2>
+        <div class="muted">Tanggal: <span id="dateReadable">1 Januari 2026</span></div>
+        <div class="details">
+          <div class="detail-item">Waktu: <strong id="time">10:00 WIB</strong></div>
+          <div class="detail-item">Lokasi: <strong id="location">Gedung Serbaguna, Kota</strong></div>
+          <div class="detail-item">Tamu: <strong id="host">Keluarga A</strong></div>
+          <div class="detail-item">Dresscode: <strong id="dress">Batik / Formal</strong></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <div class="countdown" id="countdown">Hitung mundur: —</div>
+          <div class="rsvp">
+            <button id="btnAccept">Hadir</button>
+            <button id="btnMaybe">Mungkin</button>
+            <button id="btnDecline">Tidak Bisa</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Pesan untuk tamu</h3>
+      <p id="message">Dengan senang hati kami mengundang Bapak/Ibu/Saudara/i hadir untuk merayakan bersama kami.</p>
+    </section>
+
+    <section class="card">
+      <h3>Galeri</h3>
+      <div class="gallery" id="gallery">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=60" alt="foto 1">
+        <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=600&q=60" alt="foto 2">
+        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=600&q=60" alt="foto 3">
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Lokasi & Peta</h3>
+      <p class="muted">Klik peta untuk membuka petunjuk rute di Google Maps</p>
+      <div style="height:280px;border-radius:10px;overflow:hidden;border:1px solid #eee">
+        <iframe id="gmap" src="https://www.google.com/maps/embed?pb=" style="border:0;width:100%;height:100%" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Daftar tamu (RSVP)</h3>
+      <div id="rsvpList" style="min-height:40px">Belum ada respon.</div>
+    </section>
+
+    <section class="card" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div>
+        <small class="muted">Bagikan undangan ini:</small>
+        <div style="margin-top:6px">
+          <button id="shareBtn">Salin tautan</button>
+          <button id="downloadBtn">Cetak / Simpan PDF</button>
+        </div>
+      </div>
+      <div class="muted">Powered by Undangan Digital • Edit mudah</div>
+    </section>
+
+  </main>
+
+  <footer>
+    <small>Untuk kustomisasi — kirimkan nama pengantin, tanggal, waktu, alamat, foto sampul, dan pesan undangan.</small>
+  </footer>
+
+  <script>
+    // --- Config: ubah nilai di sini untuk menyesuaikan undangan ---
+    const config = {
+      title: 'Undangan Pernikahan',
+      subtitle: 'Kami mengundang Anda untuk hadir pada hari bahagia kami',
+      names: 'Budi & Siti',
+      dateISO: '2026-01-01T10:00:00', // gunakan format ISO
+      location: 'Gedung Serba Guna, Jl. Contoh No.1, Kota',
+      timeText: '10:00 WIB',
+      host: 'Keluarga Budi & Siti',
+      dress: 'Batik / Formal',
+      message: 'Mohon doa restu dan kehadiran Anda pada acara pernikahan kami.',
+      coverImage: '',
+      googleMapsEmbedQuery: ''
+    };
+
+    // apply config
+    document.getElementById('title').textContent = config.title;
+    document.getElementById('subtitle').textContent = config.subtitle;
+    document.getElementById('names').textContent = config.names;
+    if(config.coverImage) document.getElementById('coverImage').style.backgroundImage = `url(${config.coverImage})`;
+    document.getElementById('dateReadable').textContent = new Date(config.dateISO).toLocaleString('id-ID', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    document.getElementById('location').textContent = config.location;
+    document.getElementById('time').textContent = config.timeText;
+    document.getElementById('host').textContent = config.host;
+    document.getElementById('dress').textContent = config.dress;
+    document.getElementById('message').textContent = config.message;
+    if(config.googleMapsEmbedQuery) document.getElementById('gmap').src = 'https://www.google.com/maps/embed?'+config.googleMapsEmbedQuery;
+
+    // RSVP handling (local only)
+    const rsvpListEl = document.getElementById('rsvpList');
+    const list = [];
+    function addRsvp(name, status){
+      list.push({name,status,time:new Date().toLocaleString()});
+      renderRsvp();
+    }
+    function renderRsvp(){
+      if(!list.length){ rsvpListEl.textContent = 'Belum ada respon.'; return }
+      rsvpListEl.innerHTML = list.map(x=>`<div style="padding:6px 0;border-bottom:1px dashed #eee">${escapeHtml(x.name)} — <strong>${x.status}</strong><div style="font-size:12px;color:#999">${x.time}</div></div>`).join('')
+    }
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+    document.getElementById('btnAccept').addEventListener('click',()=>{
+      const name = prompt('Masukkan nama Anda untuk RSVP:','Tamu'); if(!name) return; addRsvp(name,'Hadir');
+    });
+    document.getElementById('btnMaybe').addEventListener('click',()=>{
+      const name = prompt('Masukkan nama Anda untuk RSVP:','Tamu'); if(!name) return; addRsvp(name,'Mungkin');
+    });
+    document.getElementById('btnDecline').addEventListener('click',()=>{
+      const name = prompt('Masukkan nama Anda untuk RSVP:','Tamu'); if(!name) return; addRsvp(name,'Tidak Bisa');
+    });
+
+    // countdown
+    function updateCountdown(){
+      const target = new Date(config.dateISO).getTime();
+      const now = Date.now();
+      const diff = target - now;
+      if(diff<=0){ document.getElementById('countdown').textContent = 'Acara sudah berlangsung atau telah selesai.'; return }
+      const days = Math.floor(diff/86400000); const hrs = Math.floor(diff%86400000/3600000); const mins = Math.floor(diff%3600000/60000); const secs = Math.floor(diff%60000/1000);
+      document.getElementById('countdown').textContent = `Tinggal: ${days} hari ${hrs} jam ${mins} menit ${secs} detik`;
+    }
+    setInterval(updateCountdown,1000); updateCountdown();
+
+    // share / copy link (simple)
+    document.getElementById('shareBtn').addEventListener('click',async ()=>{
+      try{
+        await navigator.clipboard.writeText(location.href);
+        alert('Tautan undangan tersalin ke clipboard.');
+      }catch(e){ prompt('Salin tautan ini:', location.href); }
+    });
+
+    // download / print
+    document.getElementById('downloadBtn').addEventListener('click', ()=>{ window.print(); });
+
+    // small UX: add images to gallery by URL
+    document.getElementById('gallery').addEventListener('click', ()=>{
+      const url = prompt('Tambahkan URL gambar ke galeri (contoh: https://...)'); if(!url) return;
+      const img = document.createElement('img'); img.src = url; img.alt = 'foto tambahan'; document.getElementById('gallery').appendChild(img);
+    });
+
+  </script>
+</body>
+</html>
